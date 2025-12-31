@@ -7,161 +7,180 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
+/* --- AYARLAR --- */
 :root{
-  --bg:#0f1113;
-  --text:#e9e6df;
-  --serif:"Crimson Pro", serif;
-  --sans:"Inter", sans-serif;
+  --bg: #0f1113;        /* Ana koyu zemin */
+  --text: #e9e6df;      /* Yazı rengi */
+  --serif: "Crimson Pro", serif;
+  --sans: "Inter", sans-serif;
 }
 
-/* Zemin */
-html,body{
-  margin:0;
-  height:100%;
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--sans);
-  overflow:hidden;
+*{ box-sizing: border-box; }
+
+html, body{
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  overflow: hidden; /* Sayfa kaymasın */
 }
 
-/* Grain (Kumlu Doku) */
+/* --- GRAIN EFEKTİ (Hafif karıncalanma) --- */
 .grain{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  opacity:.14;
-  mix-blend-mode:overlay;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-  z-index:9999;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  z-index: 9999;
 }
 
-/* INTRO (Giriş Ekranı) */
-.intro{
-  position:fixed;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:var(--bg);
-  transition:opacity 1.2s ease, visibility 1.2s;
-  z-index:10;
+/* --- GİRİŞ EKRANI (INTRO) --- */
+.intro {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  z-index: 10;
+  transition: opacity 1.2s ease, visibility 1.2s;
 }
 
-.intro-bg{
-  position:absolute;
-  inset:0;
-  /* İŞTE BURASI SENİN DOSYANA BAKIYOR */
-  background:url("./serininatlasi.jpg") center/cover no-repeat;
-  filter:blur(18px) brightness(.4);
-  transform:scale(1.1);
+/* Arka plandaki bulanık resim */
+.intro-bg {
+  position: absolute;
+  inset: -20px; /* Kenarlardan taşırıp blur beyazlığını önlüyoruz */
+  /* SENİN RESMİN BURADA ÇAĞIRILIYOR */
+  background: url('./serininatlasi.jpg') center/cover no-repeat;
+  filter: blur(25px) brightness(0.4); /* Bulanıklık ve Karanlık ayarı */
+  transform: scale(1.1);
 }
 
-.intro-content{
-  position:relative;
-  text-align:center;
-  animation:fadeIn 1.4s ease-out;
+.intro-content {
+  position: relative;
+  text-align: center;
+  z-index: 2;
+  animation: fadeIn 1.5s ease-out;
   color: #fff;
 }
 
-.intro h1{
-  font-family:var(--serif);
-  font-size:clamp(3.5rem,8vw,6rem);
-  font-weight:300;
-  margin:0 0 12px;
-  text-shadow:0 10px 30px rgba(0,0,0,.6);
+.intro-title {
+  font-family: var(--serif);
+  font-weight: 300; /* İnce yazı */
+  font-size: clamp(3rem, 7vw, 5rem); /* Büyük başlık */
+  margin: 0;
+  line-height: 1.2;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.intro p{
-  margin:0 0 36px;
-  font-style:italic;
-  opacity:.85;
+.intro-sub {
+  font-family: var(--serif);
+  font-style: italic; /* İtalik 'playlist' yazısı */
+  font-size: 1.1rem;
+  margin: 5px 0 40px;
+  opacity: 0.8;
+  letter-spacing: 1px;
 }
 
-.enter{
-  padding:15px 40px;
-  border-radius:50px;
-  border:1px solid rgba(255,255,255,.25);
-  background:rgba(255,255,255,.08);
-  color:#fff;
-  font-size:14px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  cursor:pointer;
-  transition:.3s;
-}
-.enter:hover{
-  background:rgba(255,255,255,.18);
-  transform:translateY(-2px);
-}
-
-/* SAHNE (Ana Ekran) */
-.main{
-  display:none;
-  opacity:0;
-  height:100%;
-  align-items:center;
-  justify-content:center;
+/* BUTON TASARIMI */
+.enter-btn {
+  padding: 14px 42px;
+  border-radius: 50px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
 }
 
-.main.visible{
-  display:flex;
-  animation:fadeIn 2s ease-out forwards;
+.enter-btn:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.6);
 }
 
-.player{
-  width:min(500px,90%);
-  box-shadow:0 30px 70px rgba(0,0,0,.65);
+/* --- ANA EKRAN (PLAYER) --- */
+.main {
+  display: none; /* Başlangıçta gizli */
+  opacity: 0;
+  height: 100vh;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+}
+
+.main.visible {
+  display: flex !important;
+  animation: fadeIn 2s ease-out forwards;
+}
+
+.player-box {
+  width: min(500px, 90%);
   border-radius: 12px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6); /* Derin gölge */
 }
 
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(15px);}
-  to{opacity:1; transform:none;}
+/* Animasyon */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
 
 <body>
 
-<div class="grain"></div>
+  <div class="grain"></div>
 
-<section class="intro" id="intro">
-  <div class="intro-bg"></div>
-  <div class="intro-content">
-    <h1>Serinin Atlası</h1>
-    <p>playlist</p>
-    <button class="enter" onclick="enter()">Devam Et</button>
-  </div>
-</section>
+  <section class="intro" id="intro">
+    <div class="intro-bg"></div>
+    <div class="intro-content">
+      <h1 class="intro-title">Serinin Atlası</h1>
+      <p class="intro-sub">playlist</p> <button class="enter-btn" onclick="enterSite()">DEVAM ET</button>
+    </div>
+  </section>
 
-<main class="main" id="main">
-  <div class="player">
-    <iframe
-      src="https://open.spotify.com/embed/playlist/5MfxuN7MpLvnejX9ViihGA"
-      width="100%"
-      height="352"
-      style="border-radius:12px"
-      frameborder="0"
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      loading="lazy">
-    </iframe>
-  </div>
-</main>
+  <main class="main" id="main">
+    <div class="player-box">
+      <iframe 
+        src="https://open.spotify.com/embed/playlist/5MfxuN7MpLvnejX9ViihGA?utm_source=generator" 
+        width="100%" 
+        height="352" 
+        style="border-radius:12px" 
+        frameBorder="0" 
+        allowfullscreen="" 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+        loading="lazy">
+      </iframe>
+    </div>
+  </main>
 
-<script>
-function enter(){
-  const intro = document.getElementById("intro");
-  const main  = document.getElementById("main");
-
-  intro.style.opacity = "0";
-  intro.style.visibility = "hidden";
-
-  setTimeout(()=> main.classList.add("visible"),300);
-}
-</script>
+  <script>
+    function enterSite() {
+      const intro = document.getElementById('intro');
+      const main = document.getElementById('main');
+      
+      // Giriş ekranını yavaşça yok et
+      intro.style.opacity = '0';
+      intro.style.visibility = 'hidden';
+      
+      // Ana içeriği getir
+      setTimeout(() => {
+        main.classList.add('visible');
+      }, 300);
+    }
+  </script>
 
 </body>
 </html>
